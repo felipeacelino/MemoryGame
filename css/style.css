@@ -20,22 +20,23 @@ main {
 
 .game-title {
 	width: 100%;
+	float: left;
+	margin: 20px 0px;
 	text-align: center;
-	padding: 10px;
 }
 
 .game-title h1 {
 	font-family: 'Lemonada', cursive;
-	font-size: 20px;
+	font-size: 24px;
 	font-weight: bold;
-	color: #9575cd;
+	color: #FFF;
 }
 
 /* PAINEL SCORE */
 
 .painel {
+	float: left;
 	width: 100%;
-	margin-top: 10px;
 }
 
 .painel .player {
@@ -47,6 +48,11 @@ main {
 	overflow: hidden;
 	border: 0px solid #FFF;
 	border-radius: 5px;
+	opacity: 0.3;
+}
+
+.painel .active {
+	opacity: 1;
 }
 
 .painel .player-one {
@@ -89,64 +95,79 @@ main {
 	height: auto;
 	float: left;
 	margin-top: 20px;
+	-webkit-perspective: 500;
 }
 
-.section-cards .cards-row {
-	width: 100%;
-	height: auto;
+.section-cards .card {
 	float: left;
-	margin-bottom: 5px;
-	text-align: center;
-}
-
-.section-cards .cards-row .card {
-	width: 23.5%;
-	height: 70px;
-	float: left;
-	display: inline-block;
-	background: #CCC;
+	position: relative;
+	margin-right: 10px;
+	margin-top: 10px;
 	border-radius: 5px;
-	margin-right: 5px;
-	-webkit-box-shadow: 0px 11px 17px 0px rgba(0,0,0,0.75);
-	-moz-box-shadow: 0px 11px 17px 0px rgba(0,0,0,0.75);
-	box-shadow: 0px 11px 17px 0px rgba(0,0,0,0.75);
+	border: 2px solid #FFF;
+	background: #FFF;
+	-webkit-transform-style: preserve-3d;
+	-webkit-transition: -webkit-transform 1s;
+	will-change: transform;
 }
 
-.section-cards .cards-row .card:last-child {
-	margin-right: 0px;
+.section-cards .card.flip {
+	-webkit-transform: rotateY(-180deg);
 }
 
-
-
-
-.geral { 
-  width: 200px;
-  height: 293px;
-  position: relative;
-  margin:10% auto 0;
-  -webkit-perspective: 500;
-}
-	
-.carta {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  -webkit-transform-style: preserve-3d;
-  -webkit-transition: -webkit-transform 1s;
-}
-.carta:active {
-  -webkit-transform: rotateY(-180deg);
+.section-cards .card .back {
+	-webkit-transform: rotateY(180deg);
 }
 
-.atras {-webkit-transform: rotateY(180deg);}
-
-.carta figure {
-  margin:0;
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
+.section-cards .card figure {
+	background: #FFF;
+	border-radius: 5px;
+	position: absolute;
+	margin:0;
+	overflow: hidden;
+	display: block;
+	width: 100%;
+	height: 100%;
+	-webkit-backface-visibility: hidden;
 }
 
-.carta figure img {width:200px}
+.section-cards .card figure img {
+	width:60px;
+}
+
+@media (max-width:480px) {
+	.section-cards .card {
+		width: 65px;
+		height: 65px;
+	}	
+	.section-cards .card figure img {
+		width: 65px;
+	}
+}
+@media (min-width:481px) {
+	.section-cards .card {
+		width: 80px;
+		height: 80px;
+	}	
+	.section-cards .card figure img {
+		width: 80px;
+	}
+}	
+@media (min-width:641px) {
+	.section-cards .card {
+		width: 90px;
+		height: 90px;
+	}	
+	.section-cards .card figure img {
+		width: 90px;
+	}
+}
+@media (min-width:961px) {
+	.section-cards .card {
+		width: 100px;
+		height: 100px;
+	}	
+	.section-cards .card figure img {
+		width: 100px;
+	}
+}
