@@ -21,7 +21,7 @@ main {
 .game-title {
 	width: 100%;
 	float: left;
-	margin: 20px 0px;
+	margin-top: 20px;
 	text-align: center;
 }
 
@@ -32,69 +32,13 @@ main {
 	color: #FFF;
 }
 
-/* PAINEL SCORE */
-
-.painel {
-	float: left;
-	width: 100%;
-}
-
-.painel .player {
-	background: #FFF;
-	width: auto;
-	height: auto;
-	max-width: 150px;
-	padding: 5px;
-	overflow: hidden;
-	border: 0px solid #FFF;
-	border-radius: 5px;
-	opacity: 0.3;
-}
-
-.painel .active {
-	opacity: 1;
-}
-
-.painel .player-one {
-	float: left;
-	background: #DA7B71;
-}
-
-.painel .player-two {
-	float: right;
-	background: #7798E4;
-}
-
-.painel .player .player-name {
-	width: 100%;
-	height: auto;
-	float: left;
-	color: #FFF;
-	font-family: 'Lemonada', cursive;
-	font-size: 12px;
-	font-weight: bold;
-	text-align: center;
-}
-
-.painel .player .player-score {
-	width: 100%;
-	height: auto;
-	float: left;
-	color: #FFF;
-	font-family: 'Lemonada', cursive;
-	font-size: 16px;
-	font-weight: bold;
-	text-align: center;
-	margin-top: 5px;
-}
-
 /* CARDS */
 
 .section-cards {
 	width: 100%;
 	height: auto;
 	float: left;
-	margin-top: 20px;
+	margin-top: 10px;
 	-webkit-perspective: 500;
 }
 
@@ -170,4 +114,64 @@ main {
 	.section-cards .card figure img {
 		width: 100px;
 	}
+}
+
+/* WINNER CARD */
+
+.winner {
+	width: 100%;
+	height: auto;
+	float: left;
+	margin-top: 10px;
+	text-align: center;
+	display: none;
+}
+
+.winner img {
+	max-width: 400px;
+	width: 90%;
+	height: auto;
+	border: 2px solid #FFF;
+	border-radius: 5px;
+}
+
+.winner p {
+	width: 90%;
+	max-width: 400px;
+	height: auto;
+	font-family: 'Open Sans', sans-serif;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 24px;
+	color: #FFF;
+	margin-top: 10px;
+}
+
+.winner button {
+	width: 90%;
+	max-width: 400px;
+	height: auto;
+	padding: 10px 5px;
+	border: 2px solid #FFF;
+	border-radius: 5px;
+	background: transparent;
+	font-family: 'Open Sans', sans-serif;
+	color: #FFF;
+	font-size: 18px;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin-top: 20px;
+	outline: none;
+	transition: all 0.3s ease-in;
+}	
+
+.winner button:hover,
+.winner button:active {
+	background: #FFF;
+	color: #333;
+	cursor: pointer;
+}	
+
+.winner button i {
+	margin-left: 10px;
 }

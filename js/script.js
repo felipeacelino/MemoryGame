@@ -127,7 +127,7 @@
 			imagesRandom.forEach(function(item, index) {
 
 				var card = doc.createElement('div');
-				card.setAttribute('class', 'card animated slideInDown');
+				card.setAttribute('class', 'card animated zoomIn');
 				card.setAttribute('data-pair-index', item.index);
 				card.setAttribute('data-card-index', index);
 
@@ -153,7 +153,7 @@
 						card.setAttribute('class', 'card');
 						card.addEventListener('click', click);
 					},(100));
-				},(delay+=200));
+				},(delay+=100));
 
 			});
 
@@ -216,8 +216,7 @@
 						that.hide(card2.dataset.cardIndex);
 						
 						if (that.score == that.maxScore) {
-							console.log('PARABÉNS!');
-							that.reset();
+							that.end();
 						} else {
 							console.log('acertou!');
 							that.score++;
@@ -247,20 +246,45 @@
 
 		}
 
+		this.end = function() {
+
+			var winnerCard = new DOM('.winner');
+			var cards = new DOM('.card');
+			var playAgain = new DOM('#play-again');
+			var that = this;
+
+			cards.remove();
+
+			setTimeout(function() {
+				winnerCard.addClass('animated');
+				winnerCard.toggle('fadeIn');
+				winnerCard.show();
+			}, 500);
+						
+			playAgain.on('click', function(e) {
+				that.reset();
+				e.preventDefault();
+			});
+
+		}
+
 		this.reset = function() {
+
+			var winnerCard = new DOM('.winner');
+			/*winnerCard.addClass('animated');
+			winnerCard.toggle('fadeOut');*/
+			winnerCard.hide();
+			
 			this.score = 0;
 			this.maxScore = this.images.length - 1;			
-			var cards = new DOM('.card');
-			cards.remove();
 			this.createCards();	
-			cards = new DOM('.card');
-			cards.on('click', click);
+
 		}
 
 	}
 
 	var images = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg','8.jpg'];
-	//var images = ['1.jpg','2.jpg'];
+	//var images = ['1.jpg'];
 	
 	var game = new Game(images);
 
