@@ -155,11 +155,11 @@ main {
 }	
 @media (min-width:641px) {
 	.section-cards .card {
-		width: 90px;
-		height: 90px;
+		width: 100px;
+		height: 100px;
 	}	
 	.section-cards .card figure img {
-		width: 90px;
+		width: 100px;
 	}
 }
 @media (min-width:961px) {

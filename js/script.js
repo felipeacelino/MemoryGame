@@ -1,7 +1,6 @@
 (function(win, doc){
 	'use strict';
 
-	// DOM
 	var DOM = function(selector) {
 
 		this.elements = doc.querySelectorAll(selector);
@@ -123,10 +122,12 @@
 			var cardsContainer = doc.querySelector('.section-cards');
 			cardsContainer.innerHTML = '';
 
+			var delay = 1000;
+
 			imagesRandom.forEach(function(item, index) {
 
 				var card = doc.createElement('div');
-				card.setAttribute('class', 'card');
+				card.setAttribute('class', 'card animated slideInDown');
 				card.setAttribute('data-pair-index', item.index);
 				card.setAttribute('data-card-index', index);
 
@@ -145,8 +146,14 @@
 				imgBack.setAttribute('src', 'images/' + item.image);
 				back.appendChild(imgBack);
 				card.appendChild(back);
-				
-				cardsContainer.appendChild(card);
+
+				setTimeout(function() {					
+					cardsContainer.appendChild(card);
+					setTimeout(function() {					
+						card.setAttribute('class', 'card');
+						card.addEventListener('click', click);
+					},(100));
+				},(delay+=200));
 
 			});
 
@@ -156,16 +163,6 @@
 			var card = new DOM('div[data-card-index="'+cardIndex+'"]');
 			card.addClass('flip');
 			this.play();
-		}
-
-		this.flipHide = function(cardIndex) {
-			var card = new DOM('div[data-card-index="'+cardIndex+'"]');
-			card.removeClass('flip');
-		}
-
-		this.flipToggle = function(cardIndex) {
-			var card = new DOM('div[data-card-index="'+cardIndex+'"]');
-			card.toggle('flip');
 		}
 
 		this.hide = function(cardIndex) {
@@ -237,15 +234,17 @@
 					setTimeout(function() {
 
 						that.flipHideAll();
-						that.enableClick();
 
+						setTimeout(function() {
+							that.enableClick();
+						},800);
+						
 					},1500);
 
 				}
 
-				
-
 			} 
+
 		}
 
 		this.reset = function() {
@@ -261,18 +260,15 @@
 	}
 
 	var images = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg','8.jpg'];
+	//var images = ['1.jpg','2.jpg'];
 	
 	var game = new Game(images);
 
 	game.createCards();
-
-	var cards = new DOM('.card');
 
 	function click(e) {
 		game.flipShow(this.dataset.cardIndex);
 		e.preventDefault();
 	}
 
-	cards.on('click', click);
-	
 }(window, document));
