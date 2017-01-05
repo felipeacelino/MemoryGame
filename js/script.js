@@ -12,7 +12,19 @@
 
 		this.on = function(event, callback) {
 			this.elements.forEach(function(element) {
-				element.addEventListener(event, callback, false);
+				element.addEventListener(event, callback);
+			});
+		}
+
+		this.off = function(event, callback) {
+			this.elements.forEach(function(element) {
+				element.removeEventListener(event, callback);
+			});
+		}
+
+		this.remove = function() {
+			this.elements.forEach(function(element) {
+				element.parentNode.removeChild(element);
 			});
 		}
 
@@ -40,6 +52,44 @@
 			});
 		}
 
+		this.show = function() {
+			this.elements.forEach(function(element) {
+				element.style.display = 'block';
+			});
+		}
+
+		this.hide = function() {
+			this.elements.forEach(function(element) {
+				element.style.display = 'none';
+			});
+		}
+
+		this.fadeOut = function() {
+			this.elements.forEach(function(element) {
+				element.style.opacity = 0;				
+			});
+		}
+
+		/*this.fadeOut = function(speed) {
+			speed = speed / 10;
+			this.elements.forEach(function(element) {
+				var opacity = 1.0;
+				var timeout;
+				function processing() {
+					timeout = setTimeout(function(){
+						if (opacity > 0) {
+							element.style.opacity = opacity;
+							opacity = opacity -  0.1;
+							processing();
+						} else {
+							clearTimeout(timeout);
+						}
+					}, speed);
+				}
+				processing();				
+			});
+		}*/
+
 	}
 
 	function randomArray(array) {
@@ -53,50 +103,12 @@
 		return newArray;
 	}
 
-	// Player
-	var Player = function(name, dom) {
-
-		this.name = name;
-		this.score = 0;
-		this.playing = false;
-		this.domContainer = new DOM(dom);
-		this.domName = new DOM(dom + ' .player-name');
-		this.domName.html(this.name); 
-		this.domScore = new DOM(dom + ' .player-score');
-		this.domScore.html(this.score); 
-
-		this.scoreUp = function() {
-			this.score += 1;
-		}
-
-		this.clearScore = function() {
-			this.score = 0;
-		}
-
-		this.toggle = function() {
-			this.domContainer.toggle('active');
-		}
-
-		this.statusPlay = function(stutus) {
-			this.playing = status;
-
-			if (this.playing) {
-				this.toggle();
-			} else {
-				this.toggle();
-			}	
-		}
-	}
-
 	var Game = function(images) {
 
 		this.images = images;
-		this.maxScore = this.images.length;
+		this.score = 0;
+		this.maxScore = this.images.length - 1;
 
-		this.getPlaying = function() {
-			return this.playing;
-		}
-		
 		this.createCards = function() {
 
 			var imagesObj = [];
@@ -140,64 +152,127 @@
 
 		}
 
-		this.showCard = function(cardIndex) {
+		this.flipShow = function(cardIndex) {
 			var card = new DOM('div[data-card-index="'+cardIndex+'"]');
 			card.addClass('flip');
+			this.play();
 		}
 
-		this.hideCard = function(cardIndex) {
+		this.flipHide = function(cardIndex) {
 			var card = new DOM('div[data-card-index="'+cardIndex+'"]');
 			card.removeClass('flip');
 		}
 
-		this.toggleCard = function(cardIndex) {
+		this.flipToggle = function(cardIndex) {
 			var card = new DOM('div[data-card-index="'+cardIndex+'"]');
 			card.toggle('flip');
 		}
 
-		this.showAllCards = function() {
+		this.hide = function(cardIndex) {
+			var card = new DOM('div[data-card-index="'+cardIndex+'"]');
+			card.fadeOut(100);
+		}
+
+		this.flipShowAll = function() {
 			var cards = new DOM('.card');
 			cards.addClass('flip');
 		}
 
-		this.hideAllCards = function() {
+		this.flipHideAll = function() {
 			var cards = new DOM('.card');
 			cards.removeClass('flip');
 		}
 
-	}
+		this.enableClick = function() {
+			var cards = new DOM('.card');
+			cards.on('click', click);
+		}
 
-	function play(player) {
+		this.disableClick = function() {
+			var cards = new DOM('.card');
+			cards.off('click', click);
+		}
 
-	}
-	
-	var init = function init() {
+		this.getShowCards = function()  {
+			return doc.querySelectorAll('.flip');
+		}
 
-		var player1 = new Player('Player 1', '.player-one');
-		var player2 = new Player('Player 2', '.player-two');
-		var images = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg','8.jpg'];
+		this.isValid = function(card1, card2) {
+			return card1.dataset.pairIndex === card2.dataset.pairIndex;	
+		}
 
-		var game = new Game(images);
-		
-		game.createCards();
+		this.play = function() {
 
-		var cards = new DOM('.card');
-		cards.on('click', function(e){
-			player1.statusPlay(true);
-			game.toggleCard(this.dataset.cardIndex);
-			e.preventDefault();
-		});
+			if (this.getShowCards().length == 2) {
 
-		console.log('Vez do ' + game.firstPlayerPlay.name);
-		
-		while (player1.score < game.maxScore || player2.score < game.maxScore) {
+				var that = this;
+				this.disableClick();
 
+				var card1 = this.getShowCards()[0];
+				var card2 = this.getShowCards()[1];
 
+				if (this.isValid(card1, card2)) {
+					
+					setTimeout(function() {
 
+						that.hide(card1.dataset.cardIndex);
+						that.hide(card2.dataset.cardIndex);
+						
+						if (that.score == that.maxScore) {
+							console.log('PARABÉNS!');
+							that.reset();
+						} else {
+							console.log('acertou!');
+							that.score++;
+							that.flipHideAll();
+							that.enableClick();
+						}							
+											
+					},1500);
+					
+				} else {
+
+					console.log('errou!');
+
+					setTimeout(function() {
+
+						that.flipHideAll();
+						that.enableClick();
+
+					},1500);
+
+				}
+
+				
+
+			} 
+		}
+
+		this.reset = function() {
+			this.score = 0;
+			this.maxScore = this.images.length - 1;			
+			var cards = new DOM('.card');
+			cards.remove();
+			this.createCards();	
+			cards = new DOM('.card');
+			cards.on('click', click);
 		}
 
 	}
-	
-	win.onload = init;
 
+	var images = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg','8.jpg'];
+	
+	var game = new Game(images);
+
+	game.createCards();
+
+	var cards = new DOM('.card');
+
+	function click(e) {
+		game.flipShow(this.dataset.cardIndex);
+		e.preventDefault();
+	}
+
+	cards.on('click', click);
+	
 }(window, document));
