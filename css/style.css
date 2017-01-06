@@ -136,8 +136,7 @@ main {
 }
 
 .winner p {
-	width: 90%;
-	max-width: 400px;
+	width: 100%;
 	height: auto;
 	font-family: 'Open Sans', sans-serif;
 	text-transform: uppercase;

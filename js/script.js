@@ -1,6 +1,15 @@
 (function(win, doc){
 	'use strict';
 
+	function some(array, callback) {
+		for (var i=0; i<array.length; i++) {
+			if  (callback(array[i],i)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	var DOM = function(selector) {
 
 		this.elements = doc.querySelectorAll(selector);
@@ -9,95 +18,82 @@
 			return this.elements;
 		}
 
+		this.each = function(callback) {
+			for (var i=0; i<this.elements.length; i++) {
+				callback(this.elements[i],i);
+			}
+		}
+
 		this.on = function(event, callback) {
-			this.elements.forEach(function(element) {
-				element.addEventListener(event, callback);
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].addEventListener(event, callback);
+			}	
 		}
 
 		this.off = function(event, callback) {
-			this.elements.forEach(function(element) {
-				element.removeEventListener(event, callback);
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].removeEventListener(event, callback);
+			}
 		}
 
 		this.remove = function() {
-			this.elements.forEach(function(element) {
-				element.parentNode.removeChild(element);
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].parentNode.removeChild(this.elements[i]);
+			}
 		}
 
 		this.html = function(html) {
-			this.elements.forEach(function(element) {
-				element.innerHTML = html;
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].innerHTML = html;
+			}
 		}
 
 		this.addClass = function(className) {
-			this.elements.forEach(function(element) {
-				element.classList.add(className);
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].classList.add(className);
+			}
 		}
 
 		this.removeClass = function(className) {
-			this.elements.forEach(function(element) {
-				element.classList.remove(className);
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].classList.remove(className);
+			}
 		}
 
 		this.toggle = function(className) {
-			this.elements.forEach(function(element) {
-				element.classList.toggle(className);
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].classList.toggle(className);
+			}
 		}
 
 		this.show = function() {
-			this.elements.forEach(function(element) {
-				element.style.display = 'block';
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].style.display = 'block';
+			}
 		}
 
 		this.hide = function() {
-			this.elements.forEach(function(element) {
-				element.style.display = 'none';
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].style.display = 'none';
+			}
 		}
 
 		this.fadeOut = function() {
-			this.elements.forEach(function(element) {
-				element.style.opacity = 0;				
-			});
+			for (var i=0; i<this.elements.length; i++) {
+				this.elements[i].style.opacity = 0;				
+			}
 		}
-
-		/*this.fadeOut = function(speed) {
-			speed = speed / 10;
-			this.elements.forEach(function(element) {
-				var opacity = 1.0;
-				var timeout;
-				function processing() {
-					timeout = setTimeout(function(){
-						if (opacity > 0) {
-							element.style.opacity = opacity;
-							opacity = opacity -  0.1;
-							processing();
-						} else {
-							clearTimeout(timeout);
-						}
-					}, speed);
-				}
-				processing();				
-			});
-		}*/
-
 	}
 
 	function randomArray(array) {
 		var newArray = [];
 		while (newArray.length < array.length) {
 			var newItem = array[Math.floor(Math.random() * array.length + 0)];
-			!newArray.some(function(item) {
+			if (!some(newArray, function(item,index) {
 				return item === newItem;
-			}) ? newArray.push(newItem) : '';
+			})){
+				newArray.push(newItem);
+			}
 		}
 		return newArray;
 	}
@@ -112,24 +108,25 @@
 
 			var imagesObj = [];
 
-			this.images.forEach(function(image, index) {
-				imagesObj.push({image: image, index: index});
-				imagesObj.push({image: image, index: index});
-			});
+			for (var i=0; i<this.images.length; i++) {
+				imagesObj.push({image: this.images[i], index: i});
+				imagesObj.push({image: this.images[i], index: i});
+			}
 
 			var imagesRandom = randomArray(imagesObj);
 			
 			var cardsContainer = doc.querySelector('.section-cards');
 			cardsContainer.innerHTML = '';
 
-			var delay = 1000;
-
-			imagesRandom.forEach(function(item, index) {
+			for (var index=0; index<imagesRandom.length; index++) {
+				
+				var item = imagesRandom[index];
 
 				var card = doc.createElement('div');
-				card.setAttribute('class', 'card animated zoomIn');
+				card.setAttribute('class', 'card');
 				card.setAttribute('data-pair-index', item.index);
 				card.setAttribute('data-card-index', index);
+				card.addEventListener('click', click);
 
 				var front = doc.createElement('figure');
 				front.setAttribute('class', 'front');
@@ -147,15 +144,9 @@
 				back.appendChild(imgBack);
 				card.appendChild(back);
 
-				setTimeout(function() {					
-					cardsContainer.appendChild(card);
-					setTimeout(function() {					
-						card.setAttribute('class', 'card');
-						card.addEventListener('click', click);
-					},(100));
-				},(delay+=100));
+				cardsContainer.appendChild(card);
 
-			});
+			}
 
 		}
 
@@ -218,7 +209,7 @@
 						if (that.score == that.maxScore) {
 							that.end();
 						} else {
-							console.log('acertou!');
+							//console.log('acertou!');
 							that.score++;
 							that.flipHideAll();
 							that.enableClick();
@@ -228,7 +219,7 @@
 					
 				} else {
 
-					console.log('errou!');
+					//console.log('errou!');
 
 					setTimeout(function() {
 
@@ -236,7 +227,7 @@
 
 						setTimeout(function() {
 							that.enableClick();
-						},800);
+						},100);
 						
 					},1500);
 
@@ -250,45 +241,39 @@
 
 			var winnerCard = new DOM('.winner');
 			var cards = new DOM('.card');
-			var playAgain = new DOM('#play-again');
-			var that = this;
 
 			cards.remove();
 
-			setTimeout(function() {
-				winnerCard.addClass('animated');
-				winnerCard.toggle('fadeIn');
-				winnerCard.show();
-			}, 500);
-						
-			playAgain.on('click', function(e) {
-				that.reset();
-				e.preventDefault();
-			});
+			winnerCard.addClass('animated');
+			winnerCard.toggle('fadeIn');
+			winnerCard.show();
 
 		}
 
 		this.reset = function() {
 
 			var winnerCard = new DOM('.winner');
-			/*winnerCard.addClass('animated');
-			winnerCard.toggle('fadeOut');*/
 			winnerCard.hide();
-			
-			this.score = 0;
-			this.maxScore = this.images.length - 1;			
+			this.score = 0;		
 			this.createCards();	
 
 		}
 
 	}
 
-	var images = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg','8.jpg'];
-	//var images = ['1.jpg'];
+	//var images = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg','8.jpg'];
+	var images = ['1.jpg','2.jpg','3.jpg'];
 	
 	var game = new Game(images);
-
+	
 	game.createCards();
+
+	var playAgain = new DOM('#play-again');
+
+	playAgain.on('click', function(e) {
+		game.reset();
+		e.preventDefault();
+	});
 
 	function click(e) {
 		game.flipShow(this.dataset.cardIndex);
