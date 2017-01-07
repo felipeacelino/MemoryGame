@@ -90,7 +90,7 @@ main {
 }
 @media (min-width:481px) {
 	.section-cards .card {
-		width: 80px;
+		width: 15%px;
 		height: 80px;
 	}	
 	.section-cards .card figure img {
@@ -99,11 +99,11 @@ main {
 }	
 @media (min-width:641px) {
 	.section-cards .card {
-		width: 100px;
+		width: 15%;
 		height: 100px;
 	}	
 	.section-cards .card figure img {
-		width: 100px;
+		width: 100%;
 	}
 }
 @media (min-width:961px) {
