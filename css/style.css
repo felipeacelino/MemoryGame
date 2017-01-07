@@ -70,11 +70,6 @@ main {
 	cursor: default;
 }
 
-.section-cards .card:hover {
-	border: 2px solid #FB0601;
-}
-
-
 .section-cards .card .back {
 	-webkit-transform: rotateY(180deg);
 	cursor: pointer;
